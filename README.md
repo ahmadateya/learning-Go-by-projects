@@ -1,1 +1,1 @@
-# GoLang CRUD app
+# Playing with GoLang
