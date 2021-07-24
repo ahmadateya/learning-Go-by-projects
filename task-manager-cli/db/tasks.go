@@ -3,6 +3,7 @@ package db
 import (
 	"encoding/binary"
 	"time"
+
 	"github.com/boltdb/bolt"
 )
 
@@ -12,7 +13,7 @@ var taskBucket = []byte("tasks")
 var db *bolt.DB // a package level var
 
 type Task struct {
-	Key int
+	Key   int
 	Value string
 }
 
@@ -20,8 +21,7 @@ type Task struct {
 // it wont be called before the package is loaded, its just normal func
 func Init(dbPath string) error  {
 	var err error
-	db, err := bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
-
+	db, err = bolt.Open(dbPath, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func AllTasks() ([]Task, error) {
 			// Note that every thing in boldDB is []byte, both key and value
 			// so we must convert them to int, string ...etc before using them in our app
 			tasks = append(tasks, Task{
-				Key: btoi(k),
+				Key:   btoi(k),
 				Value: string(v),
 			})
 		}
@@ -68,7 +68,7 @@ func AllTasks() ([]Task, error) {
 }
 
 func DeleteTask(key int) error {
-	return db.View(func(tx *bolt.Tx) error {
+	return db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket(taskBucket)
 		return b.Delete(itob(key))
 	})
