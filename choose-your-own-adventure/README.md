@@ -11,5 +11,5 @@ The goal of this exercise is to recreate this experience via a web application w
 - encoding/json
 - html/template
 - log
-- Functional Options // a code pattern - [articel](https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis)
+- Functional Options pattern - (code pattern) [article](https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis)
 - [JSON to Go](https://mholt.github.io/json-to-go/)
