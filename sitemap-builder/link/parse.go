@@ -1,10 +1,9 @@
 package link
 
 import (
+	"golang.org/x/net/html"
 	"io"
 	"strings"
-
-	"golang.org/x/net/html"
 )
 
 // Link represents a link (<a href="...">) in an HTML

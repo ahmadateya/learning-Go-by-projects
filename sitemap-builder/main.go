@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"sitemap-builder/link"
 	"net/http"
+	"sitemap-builder/link"
 )
 
 /*
