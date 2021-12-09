@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/xml"
 	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"sitemap-builder/link"
 	"strings"
 )
@@ -23,6 +25,17 @@ import (
 		io.Copy.copy data from reader to a writer
 		os.Stdout is the writer that writes to the terminal
 */
+
+const xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9"
+type loc struct {
+	Value string 	 `xml:"loc"`
+}
+
+type urlset struct {
+	Urls []loc `xml:"url"`
+	Xmlns string `xml:"xmlns,attr"`
+}
+
 func main() {
 	urlFlag := flag.String("url", "https://go.dev", "the url that you want to build a sitemap for")
 	maxDepth := flag.Int("depth", 3, "the maximum number of links deep to traverse")
@@ -30,9 +43,20 @@ func main() {
 
 	pages := bfs(*urlFlag, *maxDepth)
 
-	for _, page := range pages {
-		fmt.Println(page)
+	xmlSet := urlset{
+		Xmlns: xmlns,
 	}
+	for _, page := range pages {
+		xmlSet.Urls = append(xmlSet.Urls, loc{page})
+	}
+
+	fmt.Println(xml.Header)
+	enc := xml.NewEncoder(os.Stdout)
+	enc.Indent("", "  ")
+	if err := enc.Encode(xmlSet); err != nil {
+		panic(err)
+	}
+	fmt.Println()
 }
 
 func bfs(urlString string, maxDepth int) []string {
